@@ -1,48 +1,81 @@
 import express from 'express';
 import sharp from 'sharp';
-import {promises as fs} from 'fs';
+import path from 'path';
+import { promises as promisesFs } from 'fs';
+import fs from 'fs';
 
 const images = express.Router();
+const original_images_dir = 'original_images';
+const resized_images_dir = 'resized_images';
 
-const process = async (file_name: string, width: number, height: number) => {
+if (!fs.existsSync(resized_images_dir)) {
+  console.log('Directory does not exist!');
+  fs.mkdir(resized_images_dir, () => {
+    console.log('resized_images directory has been created!');
+  });
+}
+
+const available_images = fs.readdirSync(path.resolve(original_images_dir));
+
+const invalid_query_response = (): string => {
+  let msg = "Invalid Query<br>";
+  msg += "==========<br><br>Available images (filenames) are:<br><ul>";
+  for (const img of available_images) {
+    msg += `<li>${img.slice(0, -4)}</li>`;
+  }
+  msg += "</ul><br>Width and Height must be >= 200";
+  return msg;
+}
+
+
+const resize = async (filename: string, width: number, height: number) => {
   try {
-    console.log(`file_name = ${file_name}`);
+    console.log(`filename = ${filename}`);
     console.log(`width = ${width}`);
     console.log(`height = ${height}`);
-    console.log(typeof width);
 
-    const processed_image = await sharp("original_images/" + file_name + ".jpg").resize(width, height).toBuffer();
-    console.log('resized successfully');
-    await fs.writeFile("resized_images/" + file_name + ".jpg", processed_image);
+    const processed_image = await sharp(path.join(original_images_dir, filename)).resize(width, height).toBuffer();
+    await promisesFs.writeFile(path.join(resized_images_dir, filename.slice(0, -4) + "_" + width.toString() +  "_" + height.toString() + '.jpg'), processed_image);
 
   } catch (err) {
     console.log(err);
   }
 };
 
-images.get('/', (req, res) => {
-    //res.send('images route');
+const is_valid_query = (filename: string, width: number, height: number) => {
+  if (!available_images.includes(filename)) {
+    return false;
+  }
+  if (width < 200 || height < 200) {
+    return false;
+  }
+  return true;
+}
+
+images.get('/', async (req, res) => {
     const query = req.query;
-    let file_name: string = "";
-    let width: number = 0;
-    let height: number = 0;
-    if (query.file_name !== undefined) {
-        file_name = (query.file_name as unknown) as string;
+
+    if (query.filename === undefined || query.width === undefined || query.height === undefined) {
+      res.send('Please, specify the query parameters (filename, width, height), for example: ?filename=fjord&width=200&height=300');
+      return;
     }
-    if (query.width !== undefined) {
-        width = parseInt(query.width as string);
+
+    let filename = (query.filename as unknown) as string + '.jpg';
+    let width = parseInt(query.width as string);
+    let height = parseInt(query.height as string);
+
+    if (is_valid_query(filename, width, height)) {
+      const full_file_name = path.join(resized_images_dir, filename.slice(0, -4) + "_" + width.toString() +  "_" + height.toString() + '.jpg');
+      if (!fs.existsSync(full_file_name)) {
+        await resize(filename, width, height);
+        console.log('resized successfully!');
+      } else {
+        console.log('cached image has been sent');
+      }
+      res.sendFile(path.resolve(full_file_name));
+    } else {
+      res.send(invalid_query_response());
     }
-    if (query.height !== undefined) {
-        height = parseInt(query.height as string);
-    }
-    process(file_name, width, height);
-    
-    const src = `http://localhost:3000${req.originalUrl}`;
-    console.log(src);
-    console.log(req.query);
-    const html = `<img src="http://localhost:3000/resized_images/fjord.jpg">`;
-    console.log(__dirname);
-    res.sendFile("resized_images/fjord.jpg", { root: __dirname + "/../../../" });
 });
 
 export default images;
