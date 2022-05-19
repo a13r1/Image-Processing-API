@@ -129,7 +129,7 @@ images.get('/', async (req, res) => {
         } else {
             console.log('cached image has been sent!');
         }
-        res.sendFile(path.resolve(full_file_name));  // use path.resolve as sendFile requires an absolute path
+        res.sendFile(path.resolve(full_file_name)); // use path.resolve as sendFile requires an absolute path
     } else {
         res.send(invalid_query_response());
     }
