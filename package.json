@@ -7,12 +7,13 @@
   "license": "ISC",
   "description": "A simple placeholder API that allows you to place images into frontend with the size set via URL parameters",
   "scripts": {
-    "lint": "eslint src/index.ts",
-    "prettier": "prettier --config .prettierrc src/*.ts --write",
+    "lint": "eslint src/**/*.ts",
+    "prettier": "prettier --config .prettierrc src/**/*.ts --write",
     "lintier": "npm run lint && npm run prettier",
     "build": "npx tsc",
     "jasmine": "jasmine",
     "test": "npm run build && npm run jasmine",
+    "dev": "npm run lintier && npm run test",
     "start": "nodemon --exec npx ts-node src/index.ts"
   },
   "dependencies": {
