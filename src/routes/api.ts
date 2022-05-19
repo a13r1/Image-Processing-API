@@ -6,7 +6,7 @@ const api = express.Router();
 const response_style =
     'color: #404040; background: #fdfad8; font-family: consolas; font-size: 20px; padding: 24px;';
 
-api.get('/', (req, res) => {
+api.get('/', (req: express.Request, res: express.Response) => {
     res.send(`<p style="${response_style}">main api route</p>`);
 });
 

@@ -62,22 +62,18 @@ When the user tries to fetch some image with a width and a height that has been 
 the server sends the cached image instead of reprocessing the same image over and over.
 
 ## Dependencies  
-* [node](https://www.npmjs.com/package/node): ^17.7.2
+
 * [express](https://www.npmjs.com/package/express): ^4.18.1
-* [jasmine](https://www.npmjs.com/package/jasmine): ^4.1.0
-* [jasmine-spec-reporter](https://www.npmjs.com/package/jasmine-spec-reporter): ^7.0.0
 * [sharp](https://www.npmjs.com/package/sharp): ^0.30.4
 
 Dependencies scripts:
-* `npm i node`
 * `npm i express`
-* `npm i jasmine`
-* `npm i jasmine-spec-reporter`
 * `npm i sharp`
 
 
 ## Development
 Development Dependencies:
+* [node](https://www.npmjs.com/package/node): ^17.7.2
 * [eslint](https://www.npmjs.com/package/eslint): ^8.15.0
 * [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier): ^8.5.0
 * [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier): ^4.0.0
@@ -87,10 +83,13 @@ Development Dependencies:
 * [prettier](https://www.npmjs.com/package/prettier): ^2.6.2
 * [typescript](https://www.npmjs.com/package/typescript): ^4.6.4
 * [@types/express](https://www.npmjs.com/package/@types/express): ^4.17.13
+* [jasmine](https://www.npmjs.com/package/jasmine): ^4.1.0
+* [jasmine-spec-reporter](https://www.npmjs.com/package/jasmine-spec-reporter): ^7.0.0
 * [@types/jasmine](https://www.npmjs.com/package/@types/jasmine): ^4.0.3
 * [@types/sharp](https://www.npmjs.com/package/@types/sharp): ^0.30.2
 
 Development Dependencies scripts:
+* `npm i --save-dev node`
 * `npm i --save-dev eslint`
 * `npm i --save-dev eslint-config-prettier`
 * `npm i --save-dev eslint-plugin-prettier`
@@ -100,6 +99,8 @@ Development Dependencies scripts:
 * `npm i --save-dev prettier`
 * `npm i --save-dev typescript`
 * `npm i --save-dev @types/express`
+* `npm i --save-dev jasmine`
+* `npm i --save-dev jasmine-spec-reporter`
 * `npm i --save-dev @types/jasmine`
 * `npm i --save-dev @types/sharp`
 
