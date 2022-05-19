@@ -53,8 +53,9 @@ const resize = async (filename: string, width: number, height: number) => {
             processed_image
         );
     } catch (err) {
-        console.log(err);
+        return false;
     }
+    return true;
 };
 
 const is_valid_query = (filename: string, width: number, height: number) => {
@@ -112,4 +113,4 @@ images.get('/', async (req, res) => {
     }
 });
 
-export default images;
+export { images, available_images, is_valid_query, resize };
